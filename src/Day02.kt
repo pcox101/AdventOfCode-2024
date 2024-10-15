@@ -7,7 +7,7 @@ fun main() {
         return input.size
     }
 
-    val input = readInput("Day01")
+    val input = readInput("Day02")
     part1(input).println()
     part2(input).println()
 }
