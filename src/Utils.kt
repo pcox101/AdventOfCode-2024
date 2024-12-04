@@ -24,13 +24,13 @@ fun buildGameBoardFromInput(input: List<String>): Array<CharArray> {
     val height = input.size
     val width = input[0].length
 
-    var gameboard = Array(height) { CharArray(width) }
+    val gameBoard = Array(height) { CharArray(width) }
 
     for (x in 0..<width) {
         for (y in 0..<height) {
-            gameboard[x][y] = input[y][x];
+            gameBoard[x][y] = input[y][x]
         }
     }
-    return gameboard;
+    return gameBoard
 }
 
