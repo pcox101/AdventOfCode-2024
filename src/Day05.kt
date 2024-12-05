@@ -1,6 +1,6 @@
 fun main() {
 
-    fun parseInput(input: List<String>): Pair<MutableList<Array<Int>>, MutableList<MutableList<Int>>> {
+    fun parseInput(input: List<String>): Pair<List<Array<Int>>, List<List<Int>>> {
         val rules = mutableListOf<Array<Int>>()
         val updates = mutableListOf<MutableList<Int>>()
 
@@ -15,7 +15,7 @@ fun main() {
                 rules.add(arrayOf(t[0].toInt(), t[1].toInt()))
             } else {
                 val t = s.split(",")
-                updates.add(t.map({ it.toInt() }).toMutableList())
+                updates.add(t.map { it.toInt() }.toMutableList())
             }
         }
         return Pair(rules, updates)
@@ -44,38 +44,31 @@ fun main() {
         return total
     }
 
+    fun compareTwoValues(first: Int, second: Int, rules: List<Array<Int>>): Int {
+        for (rule in rules) {
+            if ((first == rule[0]) && (second == rule[1]))
+                return -1
+            else if ((first == rule[1]) && (second == rule[0]))
+                return 1
+        }
+
+        return 0
+    }
+
     fun part2(input: List<String>): Int {
         val (rules, updates) = parseInput(input)
 
-        // Loop through, and if it doesn't match then sort it until it does
+        val comparator = Comparator<Int> { first, second -> ( compareTwoValues(first, second, rules) ) }
+
+        // Loop through each update, sort it then compare against the original
         var total = 0
         for (update in updates) {
-            var anyInvalid = false
-            var index = 0
-            while (index < rules.size) {
-                val rule = rules[index]
-                val firstPos = update.indexOf(rule[0])
-                val secondPos = update.indexOf(rule[1])
+            val newUpdate = mutableListOf<Int>()
+            newUpdate.addAll(update)
+            newUpdate.sortWith(comparator)
 
-                if ((firstPos != -1) && (secondPos != -1)) {
-                    if (firstPos > secondPos) {
-                        anyInvalid = true
-                        val stack = update[secondPos]
-                        update[secondPos] = update[firstPos]
-                        update[firstPos] = stack
-                        index = 0
-                    }
-                    else
-                    {
-                        index++
-                    }
-                }
-                else {
-                    index++
-                }
-            }
-            if (anyInvalid) {
-                total += update[update.size / 2]
+            if (update != newUpdate) {
+                total += newUpdate[update.size / 2]
             }
         }
 
