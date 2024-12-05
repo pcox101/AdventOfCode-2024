@@ -1,3 +1,7 @@
+import java.time.LocalDate
+import java.time.LocalDateTime
+import kotlin.time.measureTime
+
 fun main() {
 
     fun parseInput(input: List<String>): Pair<List<Array<Int>>, List<List<Int>>> {
@@ -76,6 +80,13 @@ fun main() {
     }
 
     val input = readInput("Day05")
-    part1(input).println()
-    part2(input).println()
+    var timeTaken = measureTime {
+        part1(input).println()
+    }
+    println(timeTaken)
+
+    timeTaken = measureTime {
+        part2(input).println()
+    }
+    println(timeTaken)
 }

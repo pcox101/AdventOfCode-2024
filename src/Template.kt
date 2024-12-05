@@ -1,3 +1,5 @@
+import kotlin.time.measureTime
+
 fun main() {
 
     fun part1(input: List<String>): Int {
@@ -9,6 +11,13 @@ fun main() {
     }
 
     val input = readInput("Daynn")
-    part1(input).println()
-    part2(input).println()
+    var timeTaken = measureTime {
+        part1(input).println()
+    }
+    println(timeTaken)
+
+    timeTaken = measureTime {
+        part2(input).println()
+    }
+    println(timeTaken)
 }
