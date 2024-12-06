@@ -2,6 +2,43 @@ import kotlin.time.measureTime
 
 fun main() {
 
+    fun getVisitedPositions(
+        guardRow: Int,
+        guardColumn: Int,
+        guardRowIndex: Int,
+        guardColumnIndex: Int,
+        gameBoard: Array<CharArray>
+    ): MutableSet<String> {
+        // Now loop through
+        var guardRow = guardRow
+        var guardColumn = guardColumn
+        var guardRowIndex = guardRowIndex
+        var guardColumnIndex = guardColumnIndex
+        var finished = false
+        val visited = mutableSetOf<String>()
+        while (!finished) {
+            visited.add("$guardRow,$guardColumn")
+            try {
+                val offsetArray = arrayOf(-1, 0, 1, 0)
+                val nextRow = guardRow + offsetArray[guardRowIndex]
+                val nextColumn = guardColumn + offsetArray[guardColumnIndex]
+
+                if (gameBoard[nextRow][nextColumn] == '#') {
+                    guardRowIndex++
+                    if (guardRowIndex > 3) guardRowIndex = 0
+                    guardColumnIndex++
+                    if (guardColumnIndex > 3) guardColumnIndex = 0
+                } else {
+                    guardRow = nextRow
+                    guardColumn = nextColumn
+                }
+            } catch (e: Exception) {
+                finished = true;
+            }
+        }
+        return visited
+    }
+
     fun part1(input: List<String>): Int {
         val gameBoard = buildGameBoardFromInputByRow(input)
 
@@ -24,36 +61,8 @@ fun main() {
             if (guardColumnIndex != 0)
                 break
         }
+        val visited = getVisitedPositions(guardRow, guardColumn, guardRowIndex, guardColumnIndex, gameBoard)
 
-        // Now loop through
-        var finished = false
-        val visited = mutableSetOf<String>()
-        while (!finished)
-        {
-            visited.add("$guardRow,$guardColumn")
-            try {
-                val offsetArray = arrayOf( -1, 0, 1, 0 )
-                val nextRow = guardRow + offsetArray[guardRowIndex]
-                val nextColumn = guardColumn + offsetArray[guardColumnIndex]
-
-                if (gameBoard[nextRow][nextColumn] == '#')
-                {
-                    guardRowIndex++
-                    if (guardRowIndex > 3) guardRowIndex = 0
-                    guardColumnIndex++
-                    if (guardColumnIndex > 3) guardColumnIndex = 0
-                }
-                else
-                {
-                    guardRow = nextRow
-                    guardColumn = nextColumn
-                }
-            }
-            catch(e: Exception)
-            {
-                finished = true;
-            }
-        }
         return visited.size
     }
 
@@ -80,59 +89,62 @@ fun main() {
                 break
         }
 
-        // We need to see how many times we can insert a loop, so
-        // brute force this by trying a block in every position then
-        // running the game loop to see if it loops
+        // Optimisation, we only need to insert a blocker into the regular path
+        // so first run the loop to get a list of positions to try
+        var positionsToTry = getVisitedPositions(guardStartRow, guardStartColumn, guardStartRowIndex, guardStartColumnIndex, gameBoard)
+
         var numberWithLoops = 0
-        for (tryRow in gameBoard.indices)
-            for (tryColumn in gameBoard[tryRow].indices) {
-                var thisGameBoard = gameBoard.deepClone()
-                thisGameBoard[tryRow][tryColumn] = '#'
+        for (pos in positionsToTry) {
+            var thisGameBoard = gameBoard.deepClone()
+            var split = pos.split(",")
 
-                var guardRow = guardStartRow
-                var guardColumn = guardStartColumn
-                var guardRowIndex = guardStartRowIndex
-                var guardColumnIndex = guardStartColumnIndex
+            thisGameBoard[split[0].toInt()][split[1].toInt()] = '#'
 
-                // Now loop through
-                var finished = false
-                val visited = mutableSetOf<String>()
-                while (!finished)
+            var guardRow = guardStartRow
+            var guardColumn = guardStartColumn
+            var guardRowIndex = guardStartRowIndex
+            var guardColumnIndex = guardStartColumnIndex
+
+            // Now loop through
+            var finished = false
+            val visited = mutableSetOf<String>()
+            while (!finished)
+            {
+                val key = "$guardRow,$guardColumn,$guardRowIndex,$guardColumnIndex"
+                if (visited.contains(key)) {
+                    numberWithLoops++
+                    finished = true
+                }
+                else
                 {
-                    val key = "$guardRow,$guardColumn,$guardRowIndex,$guardColumnIndex"
-                    if (visited.contains(key)) {
-                        numberWithLoops++
-                        finished = true
+                    visited.add(key)
+                }
+
+                try {
+                    val offsetArray = arrayOf( -1, 0, 1, 0 )
+                    var nextRow = guardRow + offsetArray[guardRowIndex]
+                    var nextColumn = guardColumn + offsetArray[guardColumnIndex]
+
+                    if (thisGameBoard[nextRow][nextColumn] == '#')
+                    {
+                        guardRowIndex++
+                        if (guardRowIndex > 3) guardRowIndex = 0
+                        guardColumnIndex++
+                        if (guardColumnIndex > 3) guardColumnIndex = 0
                     }
                     else
                     {
-                        visited.add(key)
-                    }
-
-                    try {
-                        val offsetArray = arrayOf( -1, 0, 1, 0 )
-                        var nextRow = guardRow + offsetArray[guardRowIndex]
-                        var nextColumn = guardColumn + offsetArray[guardColumnIndex]
-
-                        if (thisGameBoard[nextRow][nextColumn] == '#')
-                        {
-                            guardRowIndex++
-                            if (guardRowIndex > 3) guardRowIndex = 0
-                            guardColumnIndex++
-                            if (guardColumnIndex > 3) guardColumnIndex = 0
-                        }
-                        else
-                        {
-                            guardRow = nextRow
-                            guardColumn = nextColumn
-                        }
-                    }
-                    catch(e: Exception)
-                    {
-                        finished = true;
+                        guardRow = nextRow
+                        guardColumn = nextColumn
                     }
                 }
+                catch(e: Exception)
+                {
+                    finished = true;
+                }
             }
+        }
+
         return numberWithLoops
     }
 
