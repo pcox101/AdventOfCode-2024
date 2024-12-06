@@ -1,5 +1,3 @@
-import java.time.LocalDate
-import java.time.LocalDateTime
 import kotlin.time.measureTime
 
 fun main() {
@@ -63,7 +61,6 @@ fun main() {
         val (rules, updates) = parseInput(input)
 
         val comparator = Comparator<Int> { first, second -> ( compareTwoValues(first, second, rules) ) }
-
         // Loop through each update, sort it then compare against the original
         var total = 0
         for (update in updates) {
@@ -75,7 +72,6 @@ fun main() {
                 total += newUpdate[update.size / 2]
             }
         }
-
         return total
     }
 

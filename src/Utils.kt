@@ -34,3 +34,18 @@ fun buildGameBoardFromInput(input: List<String>): Array<CharArray> {
     return gameBoard
 }
 
+fun buildGameBoardFromInputByRow(input: List<String>): Array<CharArray> {
+    val height = input.size
+    val width = input[0].length
+
+    val gameBoard = Array(height) { CharArray(width) }
+
+    for (row in 0..<width) {
+        for (column in 0..<height) {
+            gameBoard[row][column] = input[row][column]
+        }
+    }
+    return gameBoard
+}
+
+fun Array<CharArray>.deepClone() = Array(size) { get(it).clone() }
