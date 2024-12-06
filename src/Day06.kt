@@ -10,30 +10,30 @@ fun main() {
         gameBoard: Array<CharArray>
     ): MutableSet<String> {
         // Now loop through
-        var guardRow = guardRow
-        var guardColumn = guardColumn
-        var guardRowIndex = guardRowIndex
-        var guardColumnIndex = guardColumnIndex
+        var thisGuardRow = guardRow
+        var thisGuardColumn = guardColumn
+        var thisGuardRowIndex = guardRowIndex
+        var thisGuardColumnIndex = guardColumnIndex
         var finished = false
         val visited = mutableSetOf<String>()
         while (!finished) {
-            visited.add("$guardRow,$guardColumn")
+            visited.add("$thisGuardRow,$thisGuardColumn")
             try {
                 val offsetArray = arrayOf(-1, 0, 1, 0)
-                val nextRow = guardRow + offsetArray[guardRowIndex]
-                val nextColumn = guardColumn + offsetArray[guardColumnIndex]
+                val nextRow = thisGuardRow + offsetArray[thisGuardRowIndex]
+                val nextColumn = thisGuardColumn + offsetArray[thisGuardColumnIndex]
 
                 if (gameBoard[nextRow][nextColumn] == '#') {
-                    guardRowIndex++
-                    if (guardRowIndex > 3) guardRowIndex = 0
-                    guardColumnIndex++
-                    if (guardColumnIndex > 3) guardColumnIndex = 0
+                    thisGuardRowIndex++
+                    if (thisGuardRowIndex > 3) thisGuardRowIndex = 0
+                    thisGuardColumnIndex++
+                    if (thisGuardColumnIndex > 3) thisGuardColumnIndex = 0
                 } else {
-                    guardRow = nextRow
-                    guardColumn = nextColumn
+                    thisGuardRow = nextRow
+                    thisGuardColumn = nextColumn
                 }
             } catch (e: Exception) {
-                finished = true;
+                finished = true
             }
         }
         return visited
@@ -71,8 +71,8 @@ fun main() {
 
         var guardStartRow = 0
         var guardStartColumn = 0
-        var guardStartRowIndex = 0
-        var guardStartColumnIndex = 0
+        var guardStartRowIndex = 99
+        var guardStartColumnIndex = 99
         // Find the position of the guard and their direction
         for (row in gameBoard.indices) {
             for (column in gameBoard[0].indices) {
@@ -85,18 +85,18 @@ fun main() {
                 }
                 // Don't need to scan the rest, both test and actual input use caret
             }
-            if (guardStartColumnIndex != 0)
+            if (guardStartColumnIndex != 99)
                 break
         }
 
         // Optimisation, we only need to insert a blocker into the regular path
         // so first run the loop to get a list of positions to try
-        var positionsToTry = getVisitedPositions(guardStartRow, guardStartColumn, guardStartRowIndex, guardStartColumnIndex, gameBoard)
+        val positionsToTry = getVisitedPositions(guardStartRow, guardStartColumn, guardStartRowIndex, guardStartColumnIndex, gameBoard)
 
         var numberWithLoops = 0
         for (pos in positionsToTry) {
-            var thisGameBoard = gameBoard.deepClone()
-            var split = pos.split(",")
+            val thisGameBoard = gameBoard.deepClone()
+            val split = pos.split(",")
 
             thisGameBoard[split[0].toInt()][split[1].toInt()] = '#'
 
@@ -122,8 +122,8 @@ fun main() {
 
                 try {
                     val offsetArray = arrayOf( -1, 0, 1, 0 )
-                    var nextRow = guardRow + offsetArray[guardRowIndex]
-                    var nextColumn = guardColumn + offsetArray[guardColumnIndex]
+                    val nextRow = guardRow + offsetArray[guardRowIndex]
+                    val nextColumn = guardColumn + offsetArray[guardColumnIndex]
 
                     if (thisGameBoard[nextRow][nextColumn] == '#')
                     {
@@ -140,7 +140,7 @@ fun main() {
                 }
                 catch(e: Exception)
                 {
-                    finished = true;
+                    finished = true
                 }
             }
         }
