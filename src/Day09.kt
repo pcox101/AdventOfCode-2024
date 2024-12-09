@@ -2,57 +2,6 @@ import kotlin.time.measureTime
 
 fun main() {
 
-    fun processLineIntoFileSystem(input: List<String>): MutableList<Int?> {
-        val fileSystem = mutableListOf<Int?>()
-
-        var inFile = true
-        var fileNumber = 0
-        for (i in input[0].map { it.toString().toInt() }) {
-            for (j in 0..<i) {
-                if (inFile) {
-                    fileSystem.add(fileNumber)
-                } else {
-                    fileSystem.add(null)
-                }
-            }
-            if (inFile) fileNumber++
-            inFile = !inFile
-
-        }
-        return fileSystem
-    }
-
-    fun part1(input: List<String>): Long {
-        val fileSystem = processLineIntoFileSystem(input)
-
-        var currentOffset = 0
-        // Work from the back, filling nulls from the front
-        for(i in fileSystem.size - 1 downTo 0) {
-            if (fileSystem[i] != null)
-            {
-                while (fileSystem[currentOffset] != null)
-                {
-                    currentOffset++;
-                }
-                if (i < currentOffset) break
-                fileSystem[currentOffset] = fileSystem[i]
-                fileSystem[i] = null
-            }
-        }
-
-        var checksum = 0.toLong()
-        for(i in fileSystem.indices)
-        {
-            val v = fileSystem[i]
-            if (v != null)
-            {
-                checksum += i * v
-            }
-        }
-
-        return checksum
-    }
-
     fun processLineIntoFileSystem2(input: List<String>): MutableList<Pair<Int,Int?>> {
         val fileSystem = mutableListOf<Pair<Int,Int?>>()
 
@@ -84,6 +33,43 @@ fun main() {
             }
         }
         return checksum
+    }
+
+    fun part1(input: List<String>): Long {
+        val fileSystem = processLineIntoFileSystem2(input)
+
+        var target = 0
+        var source = fileSystem.size - 1
+        // Work from the back, filling nulls from the front
+        while (source > target + 1) {
+            if (fileSystem[source].second != null) {
+                while (fileSystem[target].second != null) {
+                    target++
+                }
+
+                // Copy the whole source to target
+                if (fileSystem[target].first >= fileSystem[source].first) {
+                    val remainder = fileSystem[target].first - fileSystem[source].first
+                    fileSystem[target] = Pair(fileSystem[source].first, fileSystem[source].second)
+                    fileSystem[source] = Pair(fileSystem[source].first, null)
+                    if (remainder > 0) {
+                        fileSystem.add(target + 1, Pair(remainder, null))
+                        source++
+                    }
+                }
+                else {
+                    val remainder = fileSystem[source].first - fileSystem[target].first
+                    fileSystem[target] = Pair(fileSystem[target].first, fileSystem[source].second)
+                    fileSystem[source] = Pair(remainder, fileSystem[source].second)
+
+                    // Still more to do in the source
+                    source++
+                }
+            }
+            source--
+        }
+
+        return calculateChecksum(fileSystem)
     }
 
     fun part2(input: List<String>): Long {

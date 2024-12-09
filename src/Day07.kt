@@ -7,10 +7,7 @@ fun main() {
     {
         if (list.size == 1)
         {
-            if (list[0] != result)
-                return false
-            else
-                return true
+            return list[0] == result
         }
         if (list[0] > result) return false
 
@@ -18,14 +15,14 @@ fun main() {
         val newTimesList = mutableListOf(list[0] * list[1])
         newTimesList.addAll(newList)
         val newAddList = mutableListOf(list[0] + list[1])
-        newAddList.addAll(newList);
+        newAddList.addAll(newList)
 
         return canParsePart1(result, newTimesList) || canParsePart1(result, newAddList)
     }
 
     fun part1(input: List<String>): BigInteger {
         val rx = Regex("^(\\d*): ((\\d* ?)*)\$")
-        var total = 0.toBigInteger();
+        var total = 0.toBigInteger()
         for (s in input) {
             val matches = rx.matchEntire(s)
             if (matches != null) {
@@ -46,10 +43,7 @@ fun main() {
     {
         if (list.size == 1)
         {
-            if (list[0] != result)
-                return false
-            else
-                return true
+            return list[0] == result
         }
         if (list[0] > result) return false
 
@@ -68,7 +62,7 @@ fun main() {
 
     fun part2(input: List<String>): BigInteger {
         val rx = Regex("^(\\d*): ((\\d* ?)*)\$")
-        var total = 0.toBigInteger();
+        var total = 0.toBigInteger()
         for (s in input) {
             val matches = rx.matchEntire(s)
             if (matches != null) {
