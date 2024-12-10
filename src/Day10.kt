@@ -5,9 +5,9 @@ fun main() {
 
     fun calculateTrailHeadScore(trailHeadRow: Int, trailHeadColumn: Int, gameBoard: Array<CharArray>): Int
     {
-        var destinations = mutableSetOf<Pair<Int, Int>>()
+        val destinations = mutableSetOf<Pair<Int, Int>>()
 
-        var queue: Queue<Triple<Int, Int, Int>> = LinkedList()
+        val queue: Queue<Triple<Int, Int, Int>> = LinkedList()
 
         queue.add(Triple(trailHeadRow, trailHeadColumn,0))
 
@@ -40,10 +40,10 @@ fun main() {
     }
 
     fun part1(input: List<String>): Int {
-        var gameBoard = buildGameBoardFromInputByRow(input)
+        val gameBoard = buildGameBoardFromInputByRow(input)
 
         var totalScore = 0
-        for (row in 0..<gameBoard.size)
+        for (row in gameBoard.indices)
         {
             for (column in 0..<gameBoard[row].size)
             {
@@ -56,9 +56,9 @@ fun main() {
 
     fun calculateTrailHeadRating(trailHeadRow: Int, trailHeadColumn: Int, gameBoard: Array<CharArray>): Int
     {
-        var destinations = mutableSetOf<String>()
+        val destinations = mutableSetOf<String>()
 
-        var queue: Queue<Triple<String, Int, String>> = LinkedList()
+        val queue: Queue<Triple<String, Int, String>> = LinkedList()
 
         queue.add(Triple("$trailHeadRow,$trailHeadColumn",0,""))
 
@@ -96,10 +96,10 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        var gameBoard = buildGameBoardFromInputByRow(input)
+        val gameBoard = buildGameBoardFromInputByRow(input)
 
         var totalScore = 0
-        for (row in 0..<gameBoard.size)
+        for (row in gameBoard.indices)
         {
             for (column in 0..<gameBoard[row].size)
             {
