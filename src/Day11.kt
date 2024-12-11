@@ -1,4 +1,3 @@
-import java.math.BigInteger
 import kotlin.time.measureTime
 
 fun main() {
@@ -16,22 +15,22 @@ fun main() {
         val stoneAsString = stone.toString()
         if (stone == 0L) {
             val v = calculateBlink(1, blinksRemaining - 1 )
-            cache.put(Pair(1, blinksRemaining - 1), v)
+            cache[Pair(1, blinksRemaining - 1)] = v
             return v
         }
         else if (stoneAsString.length.mod(2) == 0) {
             val half = stoneAsString.length / 2
             val s1 = stoneAsString.substring(0, half).toLong()
             val v1 = calculateBlink(s1, blinksRemaining - 1)
-            cache.put(Pair(s1, blinksRemaining - 1), v1)
+            cache[Pair(s1, blinksRemaining - 1)] = v1
             val s2 = stoneAsString.substring(half, stoneAsString.length).toLong()
             val v2 = calculateBlink(s2, blinksRemaining - 1)
-            cache.put(Pair(s2, blinksRemaining - 1), v2)
+            cache[Pair(s2, blinksRemaining - 1)] = v2
             return v1 + v2
         }
         else {
             val v = calculateBlink(stone * 2024, blinksRemaining - 1)
-            cache.put(Pair(stone * 2024, blinksRemaining - 1), v)
+            cache[Pair(stone * 2024, blinksRemaining - 1)] = v
             return v
         }
     }
