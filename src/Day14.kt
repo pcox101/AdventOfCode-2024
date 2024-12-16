@@ -48,7 +48,10 @@ fun main() {
         return q1 * q2 * q3 * q4
     }
 
-    // For reference, all this does is output the picture, and I stopped it when I saw the Christmas tree...
+    // For reference, all this did for me to solve the problem is output the picture, and I stopped it when I saw the Christmas tree...
+    // Since then, after looking on reddit the suggestion of using the danger level to output the picture was mentioned
+    // so I outputted the diagram every time the danger level reached a new minimum. This now shows the picture without
+    // having to watch it!
     fun part2(input: List<String>): Int {
         val rx = Regex("^p=(\\d+),(\\d+) v=([\\d-]+),([\\d-]+)\$")
 
