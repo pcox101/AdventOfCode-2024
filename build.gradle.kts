@@ -13,12 +13,3 @@ tasks {
         gradleVersion = "8.5"
     }
 }
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-dependencies {
-    // Other dependencies.
-    testImplementation(kotlin("test"))
-}
