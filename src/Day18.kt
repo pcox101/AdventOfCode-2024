@@ -18,14 +18,15 @@ fun main() {
 
     fun part1(input: List<String>): Int {
 
-        val corrupted = mutableSetOf<Pair<Int,Int>>()
+        val corrupted = mutableMapOf<Pair<Int,Int>,Int>()
         for (s in input.indices) {
-            if (s >= 1024) break
-            corrupted.add(split(input[s]))
+            corrupted[split(input[s])] = s
         }
 
         val maxRow = 70
         val maxCol = 70
+
+        val checkLessThan = 1024
 
         // BFS
         val visited = mutableSetOf<Pair<Int,Int>>()
@@ -45,8 +46,10 @@ fun main() {
 
             for (dir in directions) {
                 val newPos = entry.pos + dir
+                val corruptedAt = corrupted[newPos]
+                if ((corruptedAt != null) && (corruptedAt < checkLessThan)) continue
                 if (!visited.contains(newPos) && (newPos.first >= 0) && (newPos.first <= maxRow)
-                    && (newPos.second >= 0) && (newPos.second <= maxCol) && !corrupted.contains(newPos)) {
+                    && (newPos.second >= 0) && (newPos.second <= maxCol)) {
                     visited.add(newPos)
                     q.add(QueueEntry(newPos, nextIt))
                 }
@@ -57,20 +60,21 @@ fun main() {
     }
 
     fun part2(input: List<String>): String {
-        val corruptedList = input.map { split(it) }
 
         val maxRow = 70
         val maxCol = 70
 
-        // Start counter at 1024 (12 in the example)
-        for (c in 1024..< corruptedList.size) {
+        val corrupted = mutableMapOf<Pair<Int,Int>,Int>()
+        for (s in input.indices) {
+            corrupted[split(input[s])] = s
+        }
 
-            val corrupted = mutableSetOf<Pair<Int,Int>>()
-            for (s in input.indices) {
-                if (s >= c) break
-                corrupted.add(split(input[s]))
-            }
-
+        // Use a binary search
+        var highestFoundRoute = 1024
+        var lowestNotFoundRoute = corrupted.size
+        while (true)
+        {
+            val testPos = ((lowestNotFoundRoute - highestFoundRoute) / 2) + highestFoundRoute
             // BFS
             val visited = mutableSetOf<Pair<Int, Int>>()
             val q = LinkedList<QueueEntry>()
@@ -91,21 +95,25 @@ fun main() {
 
                 for (dir in directions) {
                     val newPos = entry.pos + dir
+                    val corruptedAt = corrupted[newPos]
+                    if ((corruptedAt != null) && (corruptedAt < testPos)) continue
                     if (!visited.contains(newPos) && (newPos.first >= 0) && (newPos.first <= maxRow)
-                        && (newPos.second >= 0) && (newPos.second <= maxCol) && !corrupted.contains(newPos)
-                    ) {
+                        && (newPos.second >= 0) && (newPos.second <= maxCol)) {
                         visited.add(newPos)
                         q.add(QueueEntry(newPos, nextIt))
                     }
                 }
             }
-            // No route
-            if (!foundRoute) return input[c - 1]
-            // Otherwise drop the next one
+            // Did we find a route?
+            if (foundRoute) {
+                highestFoundRoute = testPos
+            }
+            else {
+                lowestNotFoundRoute = testPos
+            }
+            // If they are 1 apart, we have found the first one, otherwise loop again
+            if (highestFoundRoute == lowestNotFoundRoute - 1) return input[lowestNotFoundRoute - 1]
         }
-
-
-        return "99999"
     }
 
     val input = readInput("Day18")
