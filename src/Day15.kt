@@ -75,7 +75,7 @@ fun main() {
                 }
                 robotPos = Pair(robotPos.first + delta.first, robotPos.second + delta.second)
             }
-            //outputGameBoard(ch.toString(), gameBoard, height, width, robotPos)
+            outputGameBoard(ch.toString(), gameBoard, height, width, robotPos)
         }
 
         // We've finished all the moves
@@ -89,7 +89,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        // The gameboard is twice as big..
+        // The game board is twice as big...
         val gameBoard = mutableMapOf<Pair<Int,Int>,String>()
         val moves = StringBuilder()
         var robotPos = Pair(0,0)
@@ -109,16 +109,20 @@ fun main() {
                 width = s.length * 2
                 for (col in s.indices) {
                     val ch = s[col].toString()
-                    if (ch == "@") {
-                        robotPos = Pair(row, col * 2)
-                    }
-                    else if (ch == "#") {
-                        gameBoard[Pair(row, col * 2)] = "#"
-                        gameBoard[Pair(row, col * 2 + 1)] = "#"
-                    }
-                    else if (ch == "O") {
-                        gameBoard[Pair(row, col * 2)] = "["
-                        gameBoard[Pair(row, col * 2 + 1)] = "]"
+                    when (ch) {
+                        "@" -> {
+                            robotPos = Pair(row, col * 2)
+                        }
+
+                        "#" -> {
+                            gameBoard[Pair(row, col * 2)] = "#"
+                            gameBoard[Pair(row, col * 2 + 1)] = "#"
+                        }
+
+                        "O" -> {
+                            gameBoard[Pair(row, col * 2)] = "["
+                            gameBoard[Pair(row, col * 2 + 1)] = "]"
+                        }
                     }
                 }
             }
@@ -140,18 +144,18 @@ fun main() {
 
             // Horizontal moves remain the same
             if (delta.first == 0) {
-                var movePos = Pair(robotPos.first + delta.first, robotPos.second + delta.second)
+                var movePos = Pair(robotPos.first, robotPos.second + delta.second)
                 while ((gameBoard[movePos] != "#") && (gameBoard[movePos] != null)) {
-                    movePos = Pair(movePos.first + delta.first, movePos.second + delta.second)
+                    movePos = Pair(movePos.first, movePos.second + delta.second)
                 }
                 if (gameBoard[movePos] == null) {
-                    movePos = Pair(movePos.first - delta.first, movePos.second - delta.second)
+                    movePos = Pair(movePos.first, movePos.second - delta.second)
                     while (movePos != robotPos) {
                         val v = gameBoard.remove(movePos)
-                        if (v != null) gameBoard[Pair(movePos.first + delta.first, movePos.second + delta.second)] = v
-                        movePos = Pair(movePos.first - delta.first, movePos.second - delta.second)
+                        if (v != null) gameBoard[Pair(movePos.first, movePos.second + delta.second)] = v
+                        movePos = Pair(movePos.first, movePos.second - delta.second)
                     }
-                    robotPos = Pair(robotPos.first + delta.first, robotPos.second + delta.second)
+                    robotPos = Pair(robotPos.first, robotPos.second + delta.second)
                 }
             }
             else {
@@ -159,12 +163,12 @@ fun main() {
                 // position and checking up/down. If that is a rock then add both of the rock to our queue of things
                 // to check next time
                 val potentialMovingThings = mutableMapOf<Pair<Int,Int>,String?>()
-                val queue: Queue<Pair<Int,Int>> = LinkedList<Pair<Int,Int>>()
+                val queue: Queue<Pair<Int,Int>> = LinkedList()
                 queue.add(robotPos)
                 var anythingMoved = true
                 while (!queue.isEmpty())
                 {
-                    var movePos = queue.remove()
+                    val movePos = queue.remove()
                     if (movePos != null) {
                         potentialMovingThings[movePos] = gameBoard[movePos]
                         // Look at what is above this position
@@ -199,7 +203,7 @@ fun main() {
                     }
                 }
             }
-            //outputGameBoard(ch.toString(), gameBoard, height, width, robotPos)
+            outputGameBoard(ch.toString(), gameBoard, height, width, robotPos)
         }
 
         // We've finished all the moves

@@ -45,13 +45,10 @@ fun main() {
 
     fun runProgram(
         program: List<Int>,
-        registers: Array<Long>,
-        programOutput: List<Int>? = null
+        registers: Array<Long>
     ): List<Int> {
 
         val output = mutableListOf<Int>()
-
-        var indexInOutput = 0
 
         var index = 0
         while (true) {
@@ -84,10 +81,6 @@ fun main() {
             // out
             else if (instruction == 5) {
                 val op = out(registers, operand)
-                //if (programOutput != null) {
-                //    if (op != programOutput[indexInOutput]) return "NotValid"
-                //    indexInOutput++
-                //}
                 output.add(op)
             }
             index += 2
@@ -152,13 +145,13 @@ fun main() {
         var i = 351863867802L
 
         var prev = 0L
-        while (i < Long.MAX_VALUE) {
+        while (true) {
             i += 16777216
 
             registers[0] = i
             registers[1] = 0
             registers[2] = 0
-            val thisOutput = runProgram(program, registers, program)
+            val thisOutput = runProgram(program, registers)
 
             for (j in thisOutput.indices) {
                 if (thisOutput[j] != program[j]) {
@@ -172,7 +165,6 @@ fun main() {
 
             if (thisOutput == program) return i
         }
-        return 99999
     }
 
     val input = readInput("Day17")

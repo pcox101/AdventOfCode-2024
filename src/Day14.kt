@@ -48,9 +48,9 @@ fun main() {
         return q1 * q2 * q3 * q4
     }
 
-    // For reference, all this did for me to solve the problem is output the picture, and I stopped it when I saw the Christmas tree...
+    // For reference, in order to get the star I just output the picture in a loop, and I stopped it when I saw the Christmas tree...
     // Since then, after looking on reddit the suggestion of using the danger level to output the picture was mentioned
-    // so I outputted the diagram every time the danger level reached a new minimum. This now shows the picture without
+    // so, I outputted the diagram every time the danger level reached a new minimum. This now shows the picture without
     // having to watch it!
     fun part2(input: List<String>): Int {
         val rx = Regex("^p=(\\d+),(\\d+) v=([\\d-]+),([\\d-]+)\$")
@@ -61,8 +61,7 @@ fun main() {
         val hHeight = height / 2
 
 
-        data class Robot(val sx: Int, val sy: Int , val vx: Int, val vy: Int) {
-        }
+        data class Robot(val sx: Int, val sy: Int , val vx: Int, val vy: Int)
 
         val l = mutableListOf<Robot>()
 
@@ -78,7 +77,6 @@ fun main() {
         for (c in 0..10000000)
         {
             val s = mutableSetOf<Pair<Int,Int>>()
-            var dl = 0
             var q1 = 0
             var q2 = 0
             var q3 = 0
@@ -104,7 +102,7 @@ fun main() {
                 }
             }
 
-            dl = q1 * q2 * q3 * q4
+            val dl = q1 * q2 * q3 * q4
 
             if (dl < mdl) {
                 mdl = dl
