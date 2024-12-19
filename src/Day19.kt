@@ -28,7 +28,7 @@ fun main() {
     }
 
     fun part1(input: List<String>): Int {
-        val patterns = input[0].split(" ").map { it.split(",")[0] }
+        val patterns = input[0].split(", ")
 
         var counter = 0
         for (p in 2..<input.size) {
@@ -39,7 +39,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        val patterns = input[0].split(" ").map { it.split(",")[0] }
+        val patterns = input[0].split(", ")
 
         var counter = 0L
         for (p in 2..<input.size) {
