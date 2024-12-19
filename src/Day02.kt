@@ -1,4 +1,5 @@
 import kotlin.math.abs
+import kotlin.time.measureTime
 
 fun main() {
     fun isSafe(n: List<Int>): Boolean {
@@ -57,6 +58,7 @@ fun main() {
                     copy.removeAt(i)
                     if (isSafe(copy)) {
                         anySafe = true
+                        break
                     }
                 }
 
@@ -69,6 +71,13 @@ fun main() {
     }
 
     val input = readInput("Day02")
-    part1(input).println()
-    part2(input).println()
+    var timeTaken = measureTime {
+        part1(input).println()
+    }
+    println(timeTaken)
+
+    timeTaken = measureTime {
+        part2(input).println()
+    }
+    println(timeTaken)
 }
