@@ -5,10 +5,6 @@ fun main() {
 
     val directions = arrayOf(Pair(0,1), Pair(-1,0), Pair(0,-1), Pair(1,0))
 
-    operator fun Pair<Int,Int>.plus(o: Pair<Int,Int>): Pair<Int,Int> {
-        return Pair(this.first + o.first, this.second + o.second)
-    }
-
     fun split(i: String): Pair<Int,Int> {
         val v = i.split(",")
         return Pair(v[0].toInt(),v[1].toInt())

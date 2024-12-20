@@ -49,3 +49,7 @@ fun buildGameBoardFromInputByRow(input: List<String>): Array<CharArray> {
 }
 
 fun Array<CharArray>.deepClone() = Array(size) { get(it).clone() }
+
+operator fun Pair<Int,Int>.plus(o: Pair<Int,Int>): Pair<Int,Int> {
+    return Pair(this.first + o.first, this.second + o.second)
+}
