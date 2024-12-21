@@ -70,7 +70,7 @@ class Holder(private val totalDepth: Int)
                 sb.append("<".repeat(abs(cols)))
             }
             // Or up from <
-            else if ((prev == '^') && (rows == -1)) {
+            else if ((prev == '<') && (rows == -1)) {
                 if (cols < 0) sb.append("<".repeat(abs(cols)))
                 if (cols > 0) sb.append(">".repeat(abs(cols)))
                 sb.append("^".repeat(abs(rows)))
