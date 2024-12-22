@@ -24,8 +24,6 @@ fun main() {
 
                 //println("$counter - $secretNumber")
             }
-
-            println("$i - $secretNumber")
             total += secretNumber
         }
 
@@ -36,12 +34,12 @@ fun main() {
         return "${this[0]},${this[1]},${this[2]},${this[3]}"
     }
 
-    fun part2(input: List<String>): Long {
-
-        var total = 0L
-        var buyerSequenceMap = mutableMapOf<Pair<String,Int>, Long>()
+    fun part2(input: List<String>): Int {
+        val totalForEachSequence = mutableMapOf<String,Int>()
 
         for (i in input) {
+            val buyerSequenceSet = mutableSetOf<String>()
+
             val buyer = i.toInt()
             var secretNumber = buyer
 
@@ -64,30 +62,19 @@ fun main() {
 
                     // Have we seen this sequence before?
                     val hash = last4sequence.getString()
-                    if (buyerSequenceMap.containsKey(Pair(hash, buyer)))
+                    if (buyerSequenceSet.contains(hash))
                         continue
 
-                    buyerSequenceMap[Pair(hash, buyer)] = onesDigit.toLong()
+                    buyerSequenceSet.add(hash)
+                    var k = totalForEachSequence[hash]
+                    if (k == null) k = onesDigit
+                    else k += onesDigit
+                    totalForEachSequence[hash] = k
                 }
             }
         }
 
-        // Now, we can work through all the sequences we saw and identify the one that would win us the most
-        val totalForEachSequence = mutableMapOf<String,Long>()
-        for (score in buyerSequenceMap) {
-            var t = totalForEachSequence[score.key.first]
-            if (t == null)
-                t = score.value
-            else
-                t += score.value
-            totalForEachSequence[score.key.first] = t
-        }
-
-        // Find the best one
-        total = totalForEachSequence.maxOf { it.value }
-
-        //println("$total")
-        return total
+        return totalForEachSequence.maxOf { it.value }
 
     }
 
